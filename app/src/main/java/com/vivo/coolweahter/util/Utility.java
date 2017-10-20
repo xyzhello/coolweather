@@ -2,9 +2,11 @@ package com.vivo.coolweahter.util;
 
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
 import com.vivo.coolweahter.db.City;
 import com.vivo.coolweahter.db.County;
 import com.vivo.coolweahter.db.Province;
+import com.vivo.coolweahter.gson.Weather;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -82,6 +84,22 @@ public class Utility {
             }
         }
         return false;
+    }
+
+    /**
+     * 将返回的JSON数据解析成Weather实体类
+     */
+
+    public static Weather handleWeatherResponse(String response) {
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
+            String weahterContent = jsonArray.getJSONObject(0).toString();
+            return new Gson().fromJson(weahterContent, Weather.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
